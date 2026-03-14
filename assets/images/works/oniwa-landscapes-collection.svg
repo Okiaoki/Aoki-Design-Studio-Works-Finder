@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 660" role="img" aria-labelledby="title desc">
+  <title id="title">Oniwa Landscapes Collection</title>
+  <desc id="desc">Landscape studio portfolio thumbnail.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f1010" />
+      <stop offset="100%" stop-color="#39403e" />
+    </linearGradient>
+  </defs>
+  <rect width="960" height="660" fill="url(#bg)" />
+  <rect x="62" y="62" width="836" height="536" rx="34" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.12)" />
+  <path d="M114 448C198 354 286 308 378 308C478 308 578 372 676 372C734 372 788 356 838 326V518H114Z" fill="rgba(255,255,255,0.12)" />
+  <path d="M114 478C200 420 286 394 372 394C472 394 570 438 666 438C736 438 794 422 838 398V518H114Z" fill="rgba(255,255,255,0.06)" />
+  <circle cx="760" cy="176" r="72" fill="rgba(255,255,255,0.08)" />
+  <text x="114" y="102" fill="#f1f0e8" font-family="Aptos, sans-serif" font-size="20" letter-spacing="5">AOKI DESIGN STUDIO</text>
+  <text x="114" y="560" fill="#f1f0e8" font-family="Bahnschrift, Arial Narrow, sans-serif" font-size="56" font-weight="700">ONIWA LANDSCAPES</text>
+  <text x="114" y="602" fill="#f1f0e8" font-family="Aptos, sans-serif" font-size="24" opacity="0.76">Landscape / Portfolio / Collection</text>
+</svg>

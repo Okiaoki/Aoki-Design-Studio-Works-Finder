@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aoki Design Studio Works Finder | 制作実績検索・比較アーカイブ</title>
+    <meta
+      name="description"
+      content="Aoki Design Studioの制作実績を検索・絞り込み・比較し、近い事例をもとに相談準備まで進めるためのアーカイブUI。"
+    />
+    <meta name="application-name" content="Aoki Design Studio Works Finder" />
+    <meta name="apple-mobile-web-app-title" content="ADS Works Finder" />
+    <meta name="theme-color" content="#111111" />
+    <meta property="og:locale" content="ja_JP" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Aoki Design Studio Works Finder" />
+    <meta
+      property="og:title"
+      content="Aoki Design Studio Works Finder | 制作実績検索・比較アーカイブ"
+    />
+    <meta
+      property="og:description"
+      content="制作実績の検索・比較・詳細確認・相談準備までを一連でつなぐ、Aoki Design StudioのアーカイブUI。"
+    />
+    <!-- Replace with the deployed URL when publishing. -->
+    <!-- <meta property="og:url" content="https://your-domain.example/aoki-design-studio-works-finder/" /> -->
+    <meta property="og:image" content="./assets/images/meta/og-image.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Aoki Design Studio Works Finderの共有用ビジュアル"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Aoki Design Studio Works Finder | 制作実績検索・比較アーカイブ"
+    />
+    <meta
+      name="twitter:description"
+      content="制作実績の検索・比較・詳細確認・相談準備までを一連でつなぐ、Aoki Design StudioのアーカイブUI。"
+    />
+    <meta name="twitter:image" content="./assets/images/meta/og-image.png" />
+    <meta
+      name="twitter:image:alt"
+      content="Aoki Design Studio Works Finderの共有用ビジュアル"
+    />
+    <!-- Replace with the deployed URL when publishing. -->
+    <!-- <link rel="canonical" href="https://your-domain.example/aoki-design-studio-works-finder/" /> -->
+    <link rel="icon" href="./assets/images/meta/favicon.svg" type="image/svg+xml" sizes="any" />
+    <link rel="icon" href="./assets/images/meta/icon-192.png" type="image/png" sizes="192x192" />
+    <link rel="shortcut icon" href="./assets/images/meta/icon-192.png" type="image/png" />
+    <link rel="apple-touch-icon" href="./assets/images/meta/apple-touch-icon.png" />
+    <link rel="manifest" href="./site.webmanifest" />
+    <link rel="stylesheet" href="./assets/css/style.css" />
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="hero" id="top">
+        <div class="hero__meta">
+          <p class="eyebrow">Aoki Design Studio Works Finder</p>
+          <p class="hero__index">制作実績アーカイブ / 2026年版</p>
+        </div>
+
+        <div class="hero__body">
+          <div class="hero__copy">
+            <p class="hero__label">実績を探す</p>
+            <h1>近い制作実績を、探して、比べて、そのまま相談へ。</h1>
+            <p class="hero__description">
+              単なる一覧ではなく、依頼検討者が制作目的や予算感から近い案件を探し、
+              比較の目線を持ったまま相談導線へ進めるためのアーカイブUIです。
+            </p>
+          </div>
+
+          <div class="hero__stats" aria-label="サイト概要">
+            <article class="stat-card">
+              <span class="stat-card__value">12</span>
+              <span class="stat-card__label">厳選実績</span>
+            </article>
+            <article class="stat-card">
+              <span class="stat-card__value">5</span>
+              <span class="stat-card__label">絞り込み軸</span>
+            </article>
+            <article class="stat-card">
+              <span class="stat-card__value">3</span>
+              <span class="stat-card__label">比較枠</span>
+            </article>
+          </div>
+        </div>
+
+        <section class="search-panel" aria-labelledby="search-heading">
+          <div class="search-panel__heading">
+            <p class="eyebrow">キーワード検索</p>
+            <h2 id="search-heading">案件名・要件・タグから探す</h2>
+          </div>
+
+          <form class="search-form" id="search-form" role="search">
+            <label class="search-form__field" for="search-input">
+              <span class="sr-only">キーワード検索</span>
+              <input
+                id="search-input"
+                name="search"
+                type="search"
+                placeholder="例: 採用、CMS、ラグジュアリー、予約導線"
+                autocomplete="off"
+              />
+            </label>
+          </form>
+
+          <div class="tag-cloud">
+            <p class="tag-cloud__label">人気タグ</p>
+            <div id="popular-tags" class="tag-cloud__list" aria-live="polite"></div>
+          </div>
+        </section>
+      </header>
+
+      <main class="discovery-layout">
+        <aside class="filter-panel" aria-labelledby="filter-heading">
+          <div class="filter-panel__header">
+            <p class="eyebrow">絞り込み</p>
+            <h2 id="filter-heading">条件から絞り込む</h2>
+            <p>
+              ジャンル・サイト種別・制作目的・実装特徴・予算帯を横断して、
+              近い制作実績だけを残します。
+            </p>
+          </div>
+
+          <div id="filter-groups" class="filter-groups" aria-live="polite"></div>
+        </aside>
+
+        <section class="results-area" aria-labelledby="results-heading">
+          <div class="result-toolbar">
+            <div class="result-toolbar__copy">
+              <p class="eyebrow">検索結果</p>
+              <h2 id="results-heading">制作実績</h2>
+            </div>
+
+            <div class="result-toolbar__controls">
+              <p id="result-count" class="result-count">12件の実績</p>
+
+              <label class="select-control" for="sort-order">
+                <span>並び替え</span>
+                <select id="sort-order" name="sortOrder">
+                  <option value="recommended">おすすめ順</option>
+                  <option value="newest">新着順</option>
+                  <option value="budget-asc">予算帯順</option>
+                </select>
+              </label>
+
+              <button id="reset-filters" class="ghost-button" type="button">
+                条件をリセット
+              </button>
+            </div>
+          </div>
+
+          <div id="active-filters" class="active-filters" aria-live="polite"></div>
+
+          <div id="works-grid" class="works-grid" aria-live="polite"></div>
+
+          <div id="empty-state" class="empty-state" hidden>
+            <p class="eyebrow">該当なし</p>
+            <h3>該当する制作実績が見つかりませんでした</h3>
+            <p>
+              条件を減らすか、検索語を変更してください。
+            </p>
+            <button id="empty-reset" class="primary-button" type="button">
+              絞り込みをリセット
+            </button>
+          </div>
+        </section>
+      </main>
+
+      <section class="cta-section" id="contact" aria-labelledby="cta-title">
+        <div class="cta-section__copy">
+          <p id="cta-eyebrow" class="eyebrow">相談準備</p>
+          <h2 id="cta-title">近い事例が見つかったら、そのまま相談準備に進む。</h2>
+          <p id="cta-description">
+            実績を見比べながら整理した要件を、そのまま相談メモとして持ち出せる導線です。
+          </p>
+        </div>
+
+        <div class="cta-section__brief" id="contact-brief" tabindex="-1">
+          <p class="eyebrow">相談メモ</p>
+          <h3 id="cta-brief-title" class="cta-section__brief-title">相談時に添えるメモ</h3>
+          <p id="cta-brief-copy" class="cta-section__brief-copy">
+            今見ている条件や事例を、相談の前提情報としてそのまま引き継げます。
+          </p>
+          <div id="cta-context" class="cta-section__context" aria-live="polite"></div>
+          <label class="sr-only" for="cta-draft">相談メモ</label>
+          <textarea
+            id="cta-draft"
+            class="cta-section__draft"
+            readonly
+            spellcheck="false"
+          ></textarea>
+          <div class="cta-section__brief-actions">
+            <button id="cta-copy" class="ghost-button" type="button">相談メモをコピー</button>
+            <p id="cta-status" class="cta-section__status" role="status" aria-live="polite"></p>
+          </div>
+        </div>
+
+        <div class="cta-section__actions">
+          <a id="cta-primary" class="primary-button" href="#contact">
+            実績を踏まえて相談する
+          </a>
+          <a id="cta-secondary" class="ghost-button" href="#top">
+            一覧を見返して候補を整理する
+          </a>
+        </div>
+      </section>
+
+      <footer class="site-footer">
+        <p>Aoki Design Studio Works Finder</p>
+        <p>検索・比較・詳細確認・相談準備を一連でつなぐ、制作実績アーカイブUI。</p>
+      </footer>
+
+      <aside class="compare-bar" id="compare-bar" aria-label="比較バー" hidden>
+        <div class="compare-bar__summary">
+          <p class="eyebrow">比較リスト</p>
+          <p id="compare-count" class="compare-bar__count">0 / 3 件選択中</p>
+          <p id="compare-note" class="compare-bar__note"></p>
+        </div>
+
+        <div id="compare-slots" class="compare-bar__slots" aria-live="polite"></div>
+
+        <div class="compare-bar__actions">
+          <button
+            id="clear-compare"
+            class="ghost-button"
+            type="button"
+            aria-label="選択中の比較候補をすべてクリア"
+          >
+            比較をクリア
+          </button>
+          <button
+            id="open-compare-panel"
+            class="primary-button"
+            type="button"
+            aria-haspopup="dialog"
+            aria-controls="compare-panel-overlay"
+            aria-expanded="false"
+            aria-label="選択中の制作実績を比較する"
+          >
+            比較を見る
+          </button>
+        </div>
+      </aside>
+
+      <div
+        id="compare-panel-overlay"
+        class="compare-panel-overlay"
+        aria-hidden="true"
+        hidden
+      >
+        <section
+          id="compare-panel"
+          class="compare-panel"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="compare-panel-title"
+          aria-describedby="compare-panel-description"
+          tabindex="-1"
+        >
+          <div class="compare-panel__header">
+            <div>
+              <p class="eyebrow">比較一覧</p>
+              <h2 id="compare-panel-title">選択中の制作実績を比較する</h2>
+              <p id="compare-panel-description" class="sr-only">
+                選択した制作実績を表形式で比較できます。Escape キーか閉じるボタンで戻れます。
+              </p>
+            </div>
+
+            <button
+              id="close-compare-panel"
+              class="ghost-button"
+              type="button"
+              aria-label="比較一覧を閉じる"
+            >
+              閉じる
+            </button>
+          </div>
+
+          <div id="compare-panel-body" class="compare-panel__body"></div>
+        </section>
+      </div>
+
+      <div
+        id="detail-modal-overlay"
+        class="detail-modal-overlay"
+        aria-hidden="true"
+        hidden
+      >
+        <section
+          id="detail-modal"
+          class="detail-modal"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="detail-modal-title"
+          aria-describedby="detail-modal-summary"
+          tabindex="-1"
+        >
+          <div class="detail-modal__header">
+            <button
+              id="close-detail-modal"
+              class="ghost-button"
+              type="button"
+              aria-label="詳細モーダルを閉じる"
+            >
+              閉じる
+            </button>
+          </div>
+
+          <div id="detail-modal-body" class="detail-modal__body"></div>
+        </section>
+      </div>
+    </div>
+
+    <script type="module" src="./js/main.js"></script>
+  </body>
+</html>

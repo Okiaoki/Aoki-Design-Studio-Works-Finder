@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-labelledby="og-title og-desc">
+  <title id="og-title">Aoki Design Studio Works Finder OGP Template</title>
+  <desc id="og-desc">Shared image template for Aoki Design Studio Works Finder.</desc>
+  <rect width="1200" height="630" fill="#f5f5f2" />
+  <rect x="70" y="68" width="1060" height="494" rx="28" fill="#e9e9e4" />
+  <rect x="88" y="86" width="1024" height="458" rx="24" fill="#fcfcfa" />
+  <rect x="760" y="132" width="300" height="148" rx="24" fill="#0f0f10" />
+  <text x="132" y="164" fill="#0f0f10" font-family="Bahnschrift, Arial Narrow, sans-serif" font-size="28" font-weight="700">
+    Aoki Design Studio Works Finder
+  </text>
+  <text x="132" y="262" fill="#0f0f10" font-family="Bahnschrift, Arial Narrow, sans-serif" font-size="60" font-weight="700">
+    <tspan x="132" dy="0">制作実績を、探して、比べて、</tspan>
+    <tspan x="132" dy="76">そのまま相談へ。</tspan>
+  </text>
+  <text x="136" y="410" fill="#4d4d4f" font-family="Aptos, Segoe UI, sans-serif" font-size="26">
+    <tspan x="136" dy="0">制作実績の検索・比較・詳細確認・相談導線を</tspan>
+    <tspan x="136" dy="42">一連でつなぐアーカイブUI</tspan>
+  </text>
+  <text x="136" y="492" fill="#79797d" font-family="Aptos, Segoe UI, sans-serif" font-size="20">
+    12 works / 5 filters / compare + favorite + URL sync
+  </text>
+  <text x="820" y="174" fill="#ffffff" font-family="Aptos, Segoe UI, sans-serif" font-size="20" letter-spacing="2">
+    ARCHIVE UI
+  </text>
+  <text x="820" y="226" fill="#ffffff" font-family="Bahnschrift, Arial Narrow, sans-serif" font-size="34" font-weight="700">
+    <tspan x="820" dy="0">Monotone</tspan>
+    <tspan x="820" dy="42">Search &amp; Compare</tspan>
+    <tspan x="820" dy="42">Consultation Flow</tspan>
+  </text>
+</svg>

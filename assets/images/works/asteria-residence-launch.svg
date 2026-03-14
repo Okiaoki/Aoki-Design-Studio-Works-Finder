@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 660" role="img" aria-labelledby="title desc">
+  <title id="title">Asteria Residence Launch</title>
+  <desc id="desc">Luxury real estate launch thumbnail.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f0f10" />
+      <stop offset="100%" stop-color="#2f3033" />
+    </linearGradient>
+  </defs>
+  <rect width="960" height="660" fill="url(#bg)" />
+  <rect x="64" y="64" width="832" height="532" rx="28" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.11)" />
+  <path d="M164 516L378 154L536 412L678 218L814 516Z" fill="rgba(255,255,255,0.08)" />
+  <path d="M240 206L372 516H120Z" fill="rgba(255,255,255,0.14)" />
+  <circle cx="742" cy="154" r="58" fill="rgba(255,255,255,0.08)" />
+  <circle cx="742" cy="154" r="18" fill="rgba(255,255,255,0.18)" />
+  <text x="92" y="112" fill="#f4f1ea" font-family="Aptos, sans-serif" font-size="20" letter-spacing="5">AOKI DESIGN STUDIO</text>
+  <text x="92" y="560" fill="#f4f1ea" font-family="Bahnschrift, Arial Narrow, sans-serif" font-size="60" font-weight="700">ASTERIA RESIDENCE</text>
+  <text x="92" y="602" fill="#f4f1ea" font-family="Aptos, sans-serif" font-size="24" opacity="0.76">Real Estate / Brand / Launch</text>
+</svg>

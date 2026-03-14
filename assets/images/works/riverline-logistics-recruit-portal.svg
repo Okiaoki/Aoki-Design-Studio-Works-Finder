@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 660" role="img" aria-labelledby="title desc">
+  <title id="title">Riverline Logistics Recruit Portal</title>
+  <desc id="desc">Recruiting portal thumbnail with dashboard-like modules.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#111214" />
+      <stop offset="100%" stop-color="#3f454a" />
+    </linearGradient>
+  </defs>
+  <rect width="960" height="660" fill="url(#bg)" />
+  <rect x="58" y="58" width="844" height="544" rx="34" fill="none" stroke="rgba(255,255,255,0.12)" />
+  <rect x="106" y="112" width="748" height="88" rx="22" fill="rgba(255,255,255,0.08)" />
+  <rect x="106" y="236" width="352" height="250" rx="24" fill="rgba(255,255,255,0.12)" />
+  <rect x="494" y="236" width="164" height="116" rx="20" fill="rgba(255,255,255,0.08)" />
+  <rect x="690" y="236" width="164" height="116" rx="20" fill="rgba(255,255,255,0.05)" />
+  <rect x="494" y="370" width="360" height="116" rx="24" fill="rgba(255,255,255,0.1)" />
+  <text x="106" y="96" fill="#f4f1ea" font-family="Aptos, sans-serif" font-size="20" letter-spacing="5">AOKI DESIGN STUDIO</text>
+  <text x="106" y="560" fill="#f4f1ea" font-family="Bahnschrift, Arial Narrow, sans-serif" font-size="54" font-weight="700">RIVERLINE LOGISTICS</text>
+  <text x="106" y="602" fill="#f4f1ea" font-family="Aptos, sans-serif" font-size="24" opacity="0.76">Recruit / Portal / Operational UI</text>
+</svg>

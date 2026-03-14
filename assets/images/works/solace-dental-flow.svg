@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 660" role="img" aria-labelledby="title desc">
+  <title id="title">Solace Dental Flow</title>
+  <desc id="desc">Clinic landing page thumbnail.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#111214" />
+      <stop offset="100%" stop-color="#404349" />
+    </linearGradient>
+  </defs>
+  <rect width="960" height="660" fill="url(#bg)" />
+  <rect x="74" y="74" width="812" height="512" rx="30" fill="none" stroke="rgba(255,255,255,0.12)" />
+  <rect x="118" y="128" width="724" height="164" rx="22" fill="rgba(255,255,255,0.06)" />
+  <rect x="118" y="324" width="224" height="170" rx="22" fill="rgba(255,255,255,0.09)" />
+  <rect x="370" y="324" width="224" height="170" rx="22" fill="rgba(255,255,255,0.05)" />
+  <rect x="622" y="324" width="220" height="170" rx="22" fill="rgba(255,255,255,0.11)" />
+  <text x="118" y="108" fill="#f2f0ea" font-family="Aptos, sans-serif" font-size="20" letter-spacing="5">AOKI DESIGN STUDIO</text>
+  <text x="118" y="560" fill="#f2f0ea" font-family="Bahnschrift, Arial Narrow, sans-serif" font-size="60" font-weight="700">SOLACE DENTAL</text>
+  <text x="118" y="604" fill="#f2f0ea" font-family="Aptos, sans-serif" font-size="24" opacity="0.76">Clinic / LP / Reservation Flow</text>
+</svg>

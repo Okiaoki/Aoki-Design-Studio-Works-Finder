@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 660" role="img" aria-labelledby="title desc">
+  <title id="title">Kuroto Tea Commerce</title>
+  <desc id="desc">Commerce-focused product page thumbnail.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#121212" />
+      <stop offset="100%" stop-color="#454545" />
+    </linearGradient>
+  </defs>
+  <rect width="960" height="660" fill="url(#bg)" />
+  <rect x="84" y="88" width="792" height="484" rx="30" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.12)" />
+  <rect x="128" y="132" width="322" height="396" rx="22" fill="rgba(255,255,255,0.08)" />
+  <rect x="486" y="164" width="330" height="34" rx="17" fill="rgba(255,255,255,0.16)" />
+  <rect x="486" y="220" width="278" height="14" rx="7" fill="rgba(255,255,255,0.09)" />
+  <rect x="486" y="250" width="244" height="14" rx="7" fill="rgba(255,255,255,0.08)" />
+  <rect x="486" y="304" width="182" height="58" rx="18" fill="#f4f1ea" />
+  <rect x="486" y="396" width="330" height="96" rx="22" fill="rgba(255,255,255,0.06)" />
+  <text x="128" y="114" fill="#f4f1ea" font-family="Aptos, sans-serif" font-size="20" letter-spacing="5">AOKI DESIGN STUDIO</text>
+  <text x="128" y="602" fill="#f4f1ea" font-family="Bahnschrift, Arial Narrow, sans-serif" font-size="58" font-weight="700">KUROTO TEA</text>
+  <text x="128" y="636" fill="#f4f1ea" font-family="Aptos, sans-serif" font-size="22" opacity="0.76">Food / Commerce / Product Story</text>
+</svg>
