@@ -1,7 +1,16 @@
 const THUMBNAIL_RASTER_FORMATS = {
-  // Add featured works here first when real screenshots are ready.
-  // Example: "lumen-clinic-renewal": "jpg",
-  // Example: "northwind-recruit-stories": "png"
+  "lumen-clinic-renewal": "jpg",
+  "northwind-recruit-stories": "jpg",
+  "asteria-residence-launch": "jpg",
+  "kuroto-tea-commerce": "jpg",
+  "solace-dental-flow": "jpg",
+  "vireon-saas-explorer": "jpg",
+  "morii-architects-journal": "jpg",
+  "hoshina-bakery-seasons": "jpg",
+  "oniwa-landscapes-collection": "jpg",
+  "riverline-logistics-recruit-portal": "jpg",
+  "sumi-skincare-global-lp": "jpg",
+  "acaia-arts-foundation-archive": "jpg"
 };
 
 const createThumbnailAssets = (slug) => {

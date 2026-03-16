@@ -98,6 +98,20 @@ function getResultCountLabel(count) {
   return `${count}件の実績`;
 }
 
+function getResultCountMarkup(count) {
+  if (count === 0) {
+    return `
+      <span class="result-count__value">0</span>
+      <span class="result-count__label">該当する実績はありません</span>
+    `;
+  }
+
+  return `
+    <span class="result-count__value">${count}</span>
+    <span class="result-count__label">件の実績</span>
+  `;
+}
+
 function getBooleanFlags(work) {
   return [
     work.hasCms ? "CMSあり" : "CMSなし",
@@ -313,9 +327,12 @@ function renderFilterGroups(container, filterCatalog, state) {
                       value="${escapeHtml(option.value)}"
                       ${checked ? "checked" : ""}
                     />
-                    <span>
-                      ${escapeHtml(option.label)}
-                      <small class="filter-option__meta">${option.count}</small>
+                    <span class="filter-option__surface">
+                      <span class="filter-option__label">${escapeHtml(option.label)}</span>
+                      <span class="filter-option__aside">
+                        <small class="filter-option__meta">${option.count}</small>
+                        <span class="filter-option__indicator" aria-hidden="true"></span>
+                      </span>
                     </span>
                   </label>
                 `;
@@ -332,7 +349,8 @@ function renderToolbar(elements, results, state) {
   const { resultCount, searchInput, sortOrder, activeFilters } = elements;
   const chips = getActiveFilterChips(state);
 
-  resultCount.textContent = getResultCountLabel(results.count);
+  resultCount.innerHTML = getResultCountMarkup(results.count);
+  resultCount.setAttribute("aria-label", getResultCountLabel(results.count));
   resultCount.dataset.empty = String(results.isEmpty);
 
   if (searchInput.value !== state.searchQuery) {
@@ -344,23 +362,27 @@ function renderToolbar(elements, results, state) {
   }
 
   activeFilters.innerHTML = chips.length
-    ? chips
-        .map(
-          (chip) => `
-            <button
-              class="filter-chip"
-              type="button"
-              data-action="remove-filter-chip"
-              data-filter-key="${escapeHtml(chip.key)}"
-              data-value="${escapeHtml(chip.value)}"
-              aria-label="${escapeHtml(chip.label)} を絞り込み条件から外す"
-            >
-              ${escapeHtml(chip.label)}
-            </button>
-          `
-        )
-        .join("")
-    : `<span class="tag-cloud__label">条件未選択。キーワード検索と複数フィルタを組み合わせて探せます。</span>`;
+    ? `
+        <span class="active-filters__label">適用中の条件</span>
+        ${chips
+          .map(
+            (chip) => `
+              <button
+                class="filter-chip"
+                type="button"
+                data-action="remove-filter-chip"
+                data-filter-key="${escapeHtml(chip.key)}"
+                data-value="${escapeHtml(chip.value)}"
+                aria-label="${escapeHtml(chip.label)} を絞り込み条件から外す"
+              >
+                <span class="filter-chip__text">${escapeHtml(chip.label)}</span>
+                <span class="filter-chip__remove" aria-hidden="true">×</span>
+              </button>
+            `
+          )
+          .join("")}
+      `
+    : `<span class="active-filters__empty">キーワード検索と条件選択を組み合わせて絞り込めます。</span>`;
 }
 
 function renderEmptyState(elements, results) {
@@ -434,7 +456,7 @@ function renderWorksGrid(elements, results, state) {
 
             <div class="work-card__utility">
               <button
-                class="card-action card-action--primary"
+                class="card-action card-action--primary work-card__primary-action"
                 type="button"
                 data-action="open-details"
                 data-work-id="${escapeHtml(work.id)}"
@@ -445,27 +467,29 @@ function renderWorksGrid(elements, results, state) {
               >
                 詳細を見る
               </button>
-              <button
-                class="card-action ${isCompared ? "work-card__action--active" : ""}"
-                type="button"
-                data-action="toggle-compare"
-                data-work-id="${escapeHtml(work.id)}"
-                aria-pressed="${isCompared}"
-                aria-label="${escapeHtml(work.title)} を${isCompared ? "比較から外す" : "比較に追加する"}"
-                ${compareDisabled ? "disabled" : ""}
-              >
-                ${isCompared ? "比較中" : compareDisabled ? "上限3件" : "比較に追加"}
-              </button>
-              <button
-                class="card-action ${isFavorite ? "work-card__action--active" : ""}"
-                type="button"
-                data-action="toggle-favorite"
-                data-work-id="${escapeHtml(work.id)}"
-                aria-pressed="${isFavorite}"
-                aria-label="${escapeHtml(work.title)} を${isFavorite ? "お気に入りから外す" : "お気に入りに追加する"}"
-              >
-                ${isFavorite ? "お気に入り済み" : "お気に入りに追加"}
-              </button>
+              <div class="work-card__secondary-actions">
+                <button
+                  class="card-action card-action--secondary work-card__secondary-action ${isCompared ? "work-card__action--active" : ""}"
+                  type="button"
+                  data-action="toggle-compare"
+                  data-work-id="${escapeHtml(work.id)}"
+                  aria-pressed="${isCompared}"
+                  aria-label="${escapeHtml(work.title)} を${isCompared ? "比較から外す" : "比較に追加する"}"
+                  ${compareDisabled ? "disabled" : ""}
+                >
+                  ${isCompared ? "比較中" : compareDisabled ? "上限3件" : "比較に追加"}
+                </button>
+                <button
+                  class="card-action card-action--secondary work-card__secondary-action ${isFavorite ? "work-card__action--active" : ""}"
+                  type="button"
+                  data-action="toggle-favorite"
+                  data-work-id="${escapeHtml(work.id)}"
+                  aria-pressed="${isFavorite}"
+                  aria-label="${escapeHtml(work.title)} を${isFavorite ? "お気に入りから外す" : "お気に入りに追加する"}"
+                >
+                  ${isFavorite ? "お気に入り済み" : "お気に入りに追加"}
+                </button>
+              </div>
             </div>
           </div>
         </article>
