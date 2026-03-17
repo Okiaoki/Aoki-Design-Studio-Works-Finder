@@ -55,6 +55,7 @@ export function buildConsultationPayload(state, worksById, options = {}) {
   const payload = {
     searchQuery: String(state.searchQuery ?? "").trim(),
     selectedGenres: toArray(state.selectedGenres),
+    selectedCaseTypes: toArray(state.selectedCaseTypes),
     selectedSiteTypes: toArray(state.selectedSiteTypes),
     selectedPurposes: toArray(state.selectedPurposes),
     selectedFeatures: toArray(state.selectedFeatures),
@@ -71,7 +72,7 @@ export function buildConsultationPayload(state, worksById, options = {}) {
 }
 
 export function buildConsultationSummary(payload) {
-  const lines = ["Aoki Design Studio 相談メモ", ""];
+  const lines = ["Aoki Design Studio Works Finder 閲覧メモ", ""];
 
   if (payload.searchQuery) {
     lines.push(`検索語: ${payload.searchQuery}`);
@@ -96,7 +97,7 @@ export function buildConsultationSummary(payload) {
     lines.push("現在は全体一覧を参照した状態です。");
   }
 
-  lines.push("", "相談したい内容:", "- 要件整理", "- 予算感の確認", "- 近い事例を踏まえた提案相談");
+  lines.push("", "見返しポイント:", "- 近い案件の共通点", "- 比較時に見たい条件");
   return lines.join("\n");
 }
 
@@ -116,6 +117,7 @@ export function buildConsultationUrl(payload, config = CONSULTATION_TARGET, curr
   }
 
   setListParam(params, QUERY_KEYS.selectedGenres, payload.selectedGenres);
+  setListParam(params, QUERY_KEYS.selectedCaseTypes, payload.selectedCaseTypes);
   setListParam(params, QUERY_KEYS.selectedSiteTypes, payload.selectedSiteTypes);
   setListParam(params, QUERY_KEYS.selectedPurposes, payload.selectedPurposes);
   setListParam(params, QUERY_KEYS.selectedFeatures, payload.selectedFeatures);
@@ -127,7 +129,7 @@ export function buildConsultationUrl(payload, config = CONSULTATION_TARGET, curr
 
   setListParam(params, QUERY_KEYS.compareIds, payload.compareIds);
 
-  params.set(extraQueryKeys.intent, "consultation");
+  params.set(extraQueryKeys.intent, "review");
   params.set(extraQueryKeys.source, config.source);
   params.set(extraQueryKeys.context, payload.context);
 

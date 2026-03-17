@@ -23,6 +23,11 @@ const worksById = new Map(works.map((work) => [work.id, work]));
 const validWorkIds = works.map((work) => work.id);
 const filterCatalog = getFilterCatalog(works);
 const popularTags = getPopularTags(works);
+const siteSummary = {
+  totalWorks: works.length,
+  realWorks: works.filter((work) => !work.isConcept).length,
+  filterAxes: filterCatalog.length
+};
 const urlStateConfig = {
   filterCatalog,
   validSortOrders: new Set(SORT_ORDERS),
@@ -36,6 +41,9 @@ const elements = {
   sortOrder: document.querySelector("#sort-order"),
   resetFilters: document.querySelector("#reset-filters"),
   emptyReset: document.querySelector("#empty-reset"),
+  heroStatTotal: document.querySelector("#hero-stat-total"),
+  heroStatReal: document.querySelector("#hero-stat-real"),
+  heroStatFilters: document.querySelector("#hero-stat-filters"),
   filterGroups: document.querySelector("#filter-groups"),
   popularTags: document.querySelector("#popular-tags"),
   resultCount: document.querySelector("#result-count"),
@@ -109,6 +117,20 @@ function renderState(state = getState()) {
   attachThumbnailFallbacks();
   saveFavoriteIds(state.favoriteIds);
   writeStateToUrl(state, urlStateConfig);
+}
+
+function renderSiteSummary() {
+  if (elements.heroStatTotal) {
+    elements.heroStatTotal.textContent = String(siteSummary.totalWorks);
+  }
+
+  if (elements.heroStatReal) {
+    elements.heroStatReal.textContent = String(siteSummary.realWorks);
+  }
+
+  if (elements.heroStatFilters) {
+    elements.heroStatFilters.textContent = String(siteSummary.filterAxes);
+  }
 }
 
 function applyThumbnailFallback(image) {
@@ -342,7 +364,7 @@ async function handleCopyConsultation() {
   const isCopied = await copyTextToClipboard(text);
 
   setConsultationStatus(
-    isCopied ? "相談メモをコピーしました。" : "コピーに失敗しました。手動でメモを選択してください。",
+    isCopied ? "閲覧メモをコピーしました。" : "コピーに失敗しました。手動でメモを選択してください。",
     !isCopied
   );
 }
@@ -622,6 +644,7 @@ function bindEvents() {
 function initialize() {
   hydrateState(getInitialState());
   const initialState = getState();
+  renderSiteSummary();
   renderState(initialState);
   previousState = initialState;
   subscribe(handleStateChange);

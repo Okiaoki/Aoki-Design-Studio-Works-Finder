@@ -1,6 +1,7 @@
 export const QUERY_KEYS = {
   searchQuery: "q",
   selectedGenres: "genre",
+  selectedCaseTypes: "case",
   selectedSiteTypes: "type",
   selectedPurposes: "purpose",
   selectedFeatures: "feature",
@@ -51,6 +52,7 @@ export function parseStateFromSearch(search, config = {}) {
 
   [
     "selectedGenres",
+    "selectedCaseTypes",
     "selectedSiteTypes",
     "selectedPurposes",
     "selectedFeatures",
@@ -96,6 +98,7 @@ export function serializeStateToQuery(state, config = {}) {
 
   [
     "selectedGenres",
+    "selectedCaseTypes",
     "selectedSiteTypes",
     "selectedPurposes",
     "selectedFeatures",

@@ -5,8 +5,8 @@ import {
 
 const comparisonRows = [
   { label: "制作目的", getValue: (work) => formatDisplayValue(work.purpose) },
-  { label: "想定予算帯", getValue: (work) => formatDisplayValue(work.budgetRange) },
-  { label: "制作期間帯", getValue: (work) => formatDisplayValue(work.durationRange) },
+  { label: "想定予算帯 / 規模感", getValue: (work) => getBudgetOrScaleLabel(work) },
+  { label: "制作期間帯 / サイト種別", getValue: (work) => getDurationOrSiteTypeLabel(work) },
   { label: "ページ数 / 規模感", getValue: (work) => formatPageAndScale(work) },
   { label: "主な機能", getValue: (work) => formatLimitedList(work.features, 3) },
   { label: "使用技術", getValue: (work) => formatLimitedList(work.techStack, 3) },
@@ -52,6 +52,123 @@ function formatPageAndScale(work) {
   }
 
   return `${pageLabel} / ${work.scale}`;
+}
+
+function hasDisplayValue(value) {
+  if (Array.isArray(value)) {
+    return value.filter(Boolean).length > 0;
+  }
+
+  return value != null && value !== "";
+}
+
+function getPageLabel(work) {
+  return work.pageCount ? `${work.pageCount}ページ` : "";
+}
+
+function getBudgetOrScaleLabel(work) {
+  if (hasDisplayValue(work.budgetRange)) {
+    return formatDisplayValue(work.budgetRange);
+  }
+
+  if (hasDisplayValue(work.scale)) {
+    return formatDisplayValue(work.scale);
+  }
+
+  if (work.pageCount) {
+    return getPageLabel(work);
+  }
+
+  return formatDisplayValue(work.siteType);
+}
+
+function getDurationOrSiteTypeLabel(work) {
+  if (hasDisplayValue(work.durationRange)) {
+    return formatDisplayValue(work.durationRange);
+  }
+
+  return formatDisplayValue(work.siteType);
+}
+
+function renderFactsList(facts) {
+  return facts
+    .filter((fact) => fact && hasDisplayValue(fact.value))
+    .map(
+      (fact) => `
+        <div>
+          <dt>${escapeHtml(fact.label)}</dt>
+          <dd>${escapeHtml(fact.value)}</dd>
+        </div>
+      `
+    )
+    .join("");
+}
+
+function getCardMetaItems(work) {
+  const secondaryItems = [
+    hasDisplayValue(work.budgetRange)
+      ? { label: "想定予算", value: formatDisplayValue(work.budgetRange) }
+      : work.pageCount
+        ? { label: "ページ数", value: getPageLabel(work) }
+        : null,
+    hasDisplayValue(work.durationRange)
+      ? { label: "制作期間", value: formatDisplayValue(work.durationRange) }
+      : hasDisplayValue(work.siteType)
+        ? { label: "サイト種別", value: formatDisplayValue(work.siteType) }
+        : null
+  ].filter(Boolean);
+
+  return [
+    {
+      label: "制作目的",
+      value: formatDisplayValue(work.purpose),
+      className: "work-card__meta-item work-card__meta-item--wide"
+    },
+    ...secondaryItems.map((item) => ({
+      ...item,
+      className: "work-card__meta-item"
+    }))
+  ];
+}
+
+function getDetailQuickFacts(work) {
+  return [
+    { label: "制作目的", value: formatDisplayValue(work.purpose) },
+    { label: "ページ数", value: getPageLabel(work) || "-" },
+    {
+      label: hasDisplayValue(work.budgetRange) ? "想定予算帯" : "サイト種別",
+      value: hasDisplayValue(work.budgetRange)
+        ? formatDisplayValue(work.budgetRange)
+        : formatDisplayValue(work.siteType)
+    },
+    {
+      label: hasDisplayValue(work.durationRange)
+        ? "制作期間帯"
+        : hasDisplayValue(work.scale)
+          ? "規模感"
+          : "更新方式",
+      value: hasDisplayValue(work.durationRange)
+        ? formatDisplayValue(work.durationRange)
+        : hasDisplayValue(work.scale)
+          ? formatDisplayValue(work.scale)
+          : getContentModeLabel(work)
+    }
+  ];
+}
+
+function getProductionFacts(work) {
+  return [
+    hasDisplayValue(work.budgetRange)
+      ? { label: "想定予算帯", value: formatDisplayValue(work.budgetRange) }
+      : { label: "ページ数", value: getPageLabel(work) || "-" },
+    hasDisplayValue(work.durationRange)
+      ? { label: "制作期間帯", value: formatDisplayValue(work.durationRange) }
+      : { label: "サイト種別", value: formatDisplayValue(work.siteType) },
+    hasDisplayValue(work.scale)
+      ? { label: "規模感", value: formatDisplayValue(work.scale) }
+      : { label: "更新方式", value: getContentModeLabel(work) },
+    { label: "デザイン傾向", value: formatDisplayValue(work.designTone) }
+  ];
 }
 
 function formatList(items, className) {
@@ -169,6 +286,10 @@ function hasDetailPageUrl(work) {
   );
 }
 
+function isExternalDetailUrl(detailUrl) {
+  return /^(?:[a-z]+:)?\/\//i.test(detailUrl.trim());
+}
+
 function renderWorkImage(work, attributes = "") {
   const fallbackSource =
     work.thumbnailFallback && work.thumbnailFallback !== work.thumbnail ? work.thumbnailFallback : "";
@@ -180,12 +301,7 @@ function renderWorkImage(work, attributes = "") {
 }
 
 function renderDetailQuickFacts(work) {
-  const facts = [
-    { label: "制作目的", value: formatDisplayValue(work.purpose) },
-    { label: "想定予算帯", value: formatDisplayValue(work.budgetRange) },
-    { label: "制作期間帯", value: formatDisplayValue(work.durationRange) },
-    { label: "ページ数", value: work.pageCount ? `${work.pageCount}ページ` : "-" }
-  ];
+  const facts = getDetailQuickFacts(work);
 
   return facts
     .map(
@@ -211,24 +327,26 @@ function getConsultationContent(results, state, worksById, consultationConfig, o
   const activeWork = payload.activeWork;
   const comparedWorks = payload.compareTitles;
   const filterLabels = payload.filterLabels;
+  const totalWorksCount = worksById.size;
+  const realWorksCount = Array.from(worksById.values()).filter((work) => !work.isConcept).length;
 
-  let eyebrow = "相談準備";
-  let title = "近い事例が見つかったら、そのまま相談準備に進む。";
-  let description = "実績を見比べながら整理した要件を、そのまま相談メモとして持ち出せる導線です。";
-  let briefTitle = "相談時に添えるメモ";
-  let briefCopy = "現在の閲覧内容をベースに、相談ページへ引き継ぎやすいメモを自動で整えています。";
-  let primaryLabel = "実績を踏まえて相談する";
-  let secondaryLabel = "一覧を見返して候補を整理する";
+  let eyebrow = "作品メモ";
+  let title = "比較で見えた観点を、短く残す。";
+  let description = "検索や比較で見えた条件や判断軸を、掲載用作品の締めとして整理する補助領域です。";
+  let briefTitle = "見返し用メモ";
+  let briefCopy = "現在の閲覧内容をベースに、あとから参照しやすいメモを自動で整えています。";
+  let primaryLabel = "この条件をメモに残す";
+  let secondaryLabel = "一覧へ戻る";
   let secondaryHref = state.compareIds.length ? "#compare-bar" : "#results-heading";
-  let contextItems = ["制作実績 12件", "比較は最大3件", "お気に入りはローカル保存"];
+  let contextItems = [`掲載案件 ${totalWorksCount}件`, `実案件 ${realWorksCount}件`, "比較は最大3件"];
 
   if (activeWork && (options.forceWork || state.isDetailModalOpen)) {
-    eyebrow = "案件をもとに相談";
-    title = "この事例に近い制作を、そのまま相談する。";
-    description = `${activeWork.title} の構成・予算帯・制作目的を踏まえて、近い相談へつなげます。`;
-    briefTitle = "この事例を起点にした相談メモ";
-    briefCopy = "案件単位の要件がそのまま伝わるよう、参考事例と前提条件を整えています。";
-    primaryLabel = "この事例を参考に相談する";
+    eyebrow = "事例メモ";
+    title = "この事例の要点を、短く残す。";
+    description = `${activeWork.title} の構成・制作目的・近い条件を踏まえて、見返しやすい形で整理します。`;
+    briefTitle = "この事例を起点にしたメモ";
+    briefCopy = "案件単位の要点が伝わるよう、参考事例と前提条件を簡潔に整えています。";
+    primaryLabel = "この事例をメモに残す";
     secondaryLabel = "一覧に戻って他の候補も見る";
     secondaryHref = "#results-heading";
     contextItems = [
@@ -237,35 +355,35 @@ function getConsultationContent(results, state, worksById, consultationConfig, o
       formatDisplayValue(activeWork.purpose)
     ];
   } else if (comparedWorks.length >= 2) {
-    eyebrow = "比較をもとに相談";
-    title = "比較中の事例を踏まえて、要件を相談する。";
-    description = "複数案件の差分を見たうえで、必要なページ数・機能・予算帯を整理した状態で相談できます。";
-    briefTitle = "比較中の事例を踏まえた相談メモ";
-    briefCopy = "比較表の差分が伝わるよう、検討中の候補と相談論点をまとめています。";
-    primaryLabel = "比較中の事例を踏まえて相談する";
+    eyebrow = "比較メモ";
+    title = "比較中の事例を、差分ごと残す。";
+    description = "複数案件の差分を見たうえで、必要なページ数・機能・規模感を整理した状態で残せます。";
+    briefTitle = "比較内容を残すメモ";
+    briefCopy = "比較表の差分が伝わるよう、候補と判断軸を短くまとめています。";
+    primaryLabel = "比較内容をメモにする";
     secondaryLabel = "比較結果を見直す";
     secondaryHref = "#compare-bar";
     contextItems = comparedWorks;
   } else if (results.isEmpty) {
-    eyebrow = "要件を整理して相談";
-    title = "近い事例がなくても、要件から相談できます。";
-    description = "条件に完全一致する実績が見つからない場合でも、目的や実装要件をもとに相談へ進めます。";
-    briefTitle = "条件未一致時の相談メモ";
-    briefCopy = "近い事例がないときでも、現在の検索条件や相談論点をメモとして持ち出せます。";
-    primaryLabel = "要件をもとに相談する";
+    eyebrow = "探索メモ";
+    title = "近い事例がなくても、条件整理は残せます。";
+    description = "条件に完全一致する実績が見つからない場合でも、目的や実装要件をもとに検討メモを残せます。";
+    briefTitle = "条件整理メモ";
+    briefCopy = "近い事例がないときでも、現在の検索条件や検討観点を短く残せます。";
+    primaryLabel = "条件メモを作る";
     secondaryLabel = "条件を見直して探し直す";
     secondaryHref = "#filter-heading";
-    contextItems = ["条件再調整", "要件ヒアリング", "提案前相談"];
+    contextItems = ["条件再調整", "要件の言語化", "比較軸の再設定"];
   } else if (state.searchQuery || filterLabels.length) {
-    eyebrow = "条件をもとに相談";
-    title = "現在の条件に近い事例をもとに相談する。";
-    description = `${results.count}件まで絞り込んだ結果を前提に、制作方針や優先順位を相談しやすい導線です。`;
-    briefTitle = "絞り込み条件を踏まえた相談メモ";
-    briefCopy = "検索語や適用中の条件をそのまま相談の前提情報として渡せます。";
-    primaryLabel = "この条件に近い制作を相談する";
+    eyebrow = "条件メモ";
+    title = "現在の条件を、見返しやすく残す。";
+    description = `${results.count}件まで絞り込んだ結果を前提に、比較観点や優先順位を整理しやすくします。`;
+    briefTitle = "条件を残すメモ";
+    briefCopy = "検索語や適用中の条件を、そのまま後から参照できる形で残します。";
+    primaryLabel = "この条件のメモを作る";
     secondaryLabel = "候補を見返して比較する";
     secondaryHref = "#results-heading";
-    contextItems = filterLabels.slice(0, 4);
+    contextItems = filterLabels.slice(0, 3);
   }
 
   return {
@@ -303,41 +421,64 @@ function renderPopularTags(container, popularTags, state) {
     .join("");
 }
 
+const COLLAPSIBLE_FILTER_KEYS = new Set(["selectedFeatures", "selectedBudgetRanges"]);
+
+function renderFilterOptions(group, selectedValues) {
+  return group.options
+    .map((option) => {
+      const checked = selectedValues.includes(option.value);
+
+      return `
+        <label class="filter-option">
+          <input
+            type="checkbox"
+            data-filter-key="${escapeHtml(group.key)}"
+            value="${escapeHtml(option.value)}"
+            ${checked ? "checked" : ""}
+          />
+          <span class="filter-option__surface">
+            <span class="filter-option__label">${escapeHtml(option.label)}</span>
+            <span class="filter-option__aside">
+              <small class="filter-option__meta">${option.count}</small>
+              <span class="filter-option__indicator" aria-hidden="true"></span>
+            </span>
+          </span>
+        </label>
+      `;
+    })
+    .join("");
+}
+
 function renderFilterGroups(container, filterCatalog, state) {
   container.innerHTML = filterCatalog
     .map((group) => {
       const selectedValues = state[group.key] || [];
+      const countLabel = getSelectedLabel(selectedValues);
+      const optionsMarkup = renderFilterOptions(group, selectedValues);
+      const isCollapsible = COLLAPSIBLE_FILTER_KEYS.has(group.key);
+
+      if (isCollapsible) {
+        return `
+          <details class="filter-group filter-group--collapsible" ${selectedValues.length ? "open" : ""}>
+            <summary class="filter-group__summary">
+              <span class="filter-group__title">${escapeHtml(group.label)}</span>
+              <span class="filter-group__count">${escapeHtml(countLabel)}</span>
+            </summary>
+            <div class="filter-group__options">
+              ${optionsMarkup}
+            </div>
+          </details>
+        `;
+      }
 
       return `
         <section class="filter-group">
           <div class="filter-group__header">
             <h3 class="filter-group__title">${escapeHtml(group.label)}</h3>
-            <span class="filter-group__count">${getSelectedLabel(selectedValues)}</span>
+            <span class="filter-group__count">${escapeHtml(countLabel)}</span>
           </div>
           <div class="filter-group__options">
-            ${group.options
-              .map((option) => {
-                const checked = selectedValues.includes(option.value);
-
-                return `
-                  <label class="filter-option">
-                    <input
-                      type="checkbox"
-                      data-filter-key="${escapeHtml(group.key)}"
-                      value="${escapeHtml(option.value)}"
-                      ${checked ? "checked" : ""}
-                    />
-                    <span class="filter-option__surface">
-                      <span class="filter-option__label">${escapeHtml(option.label)}</span>
-                      <span class="filter-option__aside">
-                        <small class="filter-option__meta">${option.count}</small>
-                        <span class="filter-option__indicator" aria-hidden="true"></span>
-                      </span>
-                    </span>
-                  </label>
-                `;
-              })
-              .join("")}
+            ${optionsMarkup}
           </div>
         </section>
       `;
@@ -415,6 +556,7 @@ function renderWorksGrid(elements, results, state) {
       const compareDisabled = !isCompared && compareLimitReached;
       const caseType = getCaseTypeMeta(work);
       const tagsMarkup = renderCardTags(work.tags, 2);
+      const cardMetaItems = getCardMetaItems(work);
 
       return `
         <article class="work-card ${isCompared ? "work-card--compared" : ""} ${isFavorite ? "work-card--favorited" : ""}" data-work-id="${escapeHtml(work.id)}">
@@ -438,18 +580,16 @@ function renderWorksGrid(elements, results, state) {
             <p class="work-card__summary">${escapeHtml(work.summary)}</p>
 
             <div class="work-card__meta">
-              <div class="work-card__meta-item work-card__meta-item--wide">
-                <span class="work-card__meta-label">制作目的</span>
-                <span class="work-card__meta-value">${escapeHtml(formatDisplayValue(work.purpose))}</span>
-              </div>
-              <div class="work-card__meta-item">
-                <span class="work-card__meta-label">想定予算</span>
-                <span class="work-card__meta-value">${escapeHtml(formatDisplayValue(work.budgetRange))}</span>
-              </div>
-              <div class="work-card__meta-item">
-                <span class="work-card__meta-label">制作期間</span>
-                <span class="work-card__meta-value">${escapeHtml(formatDisplayValue(work.durationRange))}</span>
-              </div>
+              ${cardMetaItems
+                .map(
+                  (item) => `
+                    <div class="${escapeHtml(item.className)}">
+                      <span class="work-card__meta-label">${escapeHtml(item.label)}</span>
+                      <span class="work-card__meta-value">${escapeHtml(item.value)}</span>
+                    </div>
+                  `
+                )
+                .join("")}
             </div>
 
             ${tagsMarkup ? `<div class="work-card__tags">${tagsMarkup}</div>` : ""}
@@ -477,7 +617,7 @@ function renderWorksGrid(elements, results, state) {
                   aria-label="${escapeHtml(work.title)} を${isCompared ? "比較から外す" : "比較に追加する"}"
                   ${compareDisabled ? "disabled" : ""}
                 >
-                  ${isCompared ? "比較中" : compareDisabled ? "上限3件" : "比較に追加"}
+                  ${isCompared ? "比較中" : compareDisabled ? "上限3件" : "比較"}
                 </button>
                 <button
                   class="card-action card-action--secondary work-card__secondary-action ${isFavorite ? "work-card__action--active" : ""}"
@@ -485,9 +625,9 @@ function renderWorksGrid(elements, results, state) {
                   data-action="toggle-favorite"
                   data-work-id="${escapeHtml(work.id)}"
                   aria-pressed="${isFavorite}"
-                  aria-label="${escapeHtml(work.title)} を${isFavorite ? "お気に入りから外す" : "お気に入りに追加する"}"
+                  aria-label="${escapeHtml(work.title)} を${isFavorite ? "保存候補から外す" : "保存候補に加える"}"
                 >
-                  ${isFavorite ? "お気に入り済み" : "お気に入りに追加"}
+                  ${isFavorite ? "保存済み" : "保存"}
                 </button>
               </div>
             </div>
@@ -517,7 +657,7 @@ function renderCompareSlots(selectedWorks) {
         <div class="compare-slot compare-slot--filled">
           <span class="compare-slot__badge">${escapeHtml(formatDisplayValue(work.siteType))}</span>
           <p class="compare-slot__title">${escapeHtml(work.title)}</p>
-          <p class="compare-slot__meta">${escapeHtml(formatDisplayValue(work.genre))} / ${escapeHtml(formatDisplayValue(work.budgetRange))}</p>
+          <p class="compare-slot__meta">${escapeHtml(formatDisplayValue(work.genre))} / ${escapeHtml(getBudgetOrScaleLabel(work))}</p>
         </div>
       `;
     })
@@ -552,7 +692,7 @@ function renderComparePanelBody(selectedWorks) {
               <div class="compare-table__cell compare-table__cell--work" role="columnheader">
                 <span class="compare-table__eyebrow">${escapeHtml(formatDisplayValue(work.genre))} / ${escapeHtml(formatDisplayValue(work.siteType))}</span>
                 <strong>${escapeHtml(work.title)}</strong>
-                <span class="compare-table__meta">${escapeHtml(formatDisplayValue(work.purpose))} / ${escapeHtml(formatDisplayValue(work.budgetRange))}</span>
+                <span class="compare-table__meta">${escapeHtml(formatDisplayValue(work.purpose))} / ${escapeHtml(getBudgetOrScaleLabel(work))}</span>
               </div>
             `
           )
@@ -592,11 +732,13 @@ function renderCompareBar(elements, worksById, state) {
 
   compareBar.hidden = !hasCompareItems;
   compareBar.setAttribute("aria-hidden", String(!hasCompareItems));
+  document.body.classList.toggle("body--compare-active", hasCompareItems);
   openComparePanel.setAttribute("aria-expanded", String(state.isComparePanelOpen && hasCompareItems));
   openComparePanel.setAttribute("aria-disabled", String(!hasCompareItems));
   clearCompare.setAttribute("aria-disabled", String(!hasCompareItems));
 
   if (!hasCompareItems) {
+    document.documentElement.style.removeProperty("--compare-bar-offset");
     compareCount.textContent = "0 / 3 件選択中";
     compareSlots.innerHTML = "";
     compareNote.textContent = "";
@@ -609,10 +751,14 @@ function renderCompareBar(elements, worksById, state) {
   compareNote.textContent =
     selectedWorks.length === 1
       ? "あと1件追加すると、制作条件の差分を見比べやすくなります。"
-      : "選択中の事例を比較表で見比べながら、そのまま相談内容を整理できます。";
+      : "選択中の事例を比較表で見比べながら、差分と共通点を整理できます。";
   clearCompare.disabled = false;
   openComparePanel.disabled = false;
   compareSlots.innerHTML = renderCompareSlots(selectedWorks);
+  document.documentElement.style.setProperty(
+    "--compare-bar-offset",
+    `${Math.ceil(compareBar.getBoundingClientRect().height + 28)}px`
+  );
 }
 
 function renderComparePanel(elements, worksById, state) {
@@ -659,15 +805,14 @@ function renderDetailModal(elements, worksById, state, results, consultationConf
     work: activeWork,
     forceWork: true
   });
-  const externalDetailAction = hasDetailPageUrl(activeWork)
+  const detailPageAction = hasDetailPageUrl(activeWork)
     ? `
       <a
         class="ghost-button"
         href="${escapeHtml(activeWork.detailUrl)}"
-        target="_blank"
-        rel="noopener noreferrer"
+        ${isExternalDetailUrl(activeWork.detailUrl) ? 'target="_blank" rel="noopener noreferrer"' : ""}
       >
-        詳細ページを見る
+        ケーススタディを見る
       </a>
     `
     : "";
@@ -705,7 +850,7 @@ function renderDetailModal(elements, worksById, state, results, consultationConf
             data-work-id="${escapeHtml(activeWork.id)}"
             data-consultation-href="${escapeHtml(consultation.primaryHref)}"
             data-consultation-draft="${escapeHtml(consultation.draft)}"
-            aria-label="${escapeHtml(activeWork.title)} を参考に相談を始める"
+            aria-label="${escapeHtml(activeWork.title)} の閲覧メモを作る"
           >
             ${escapeHtml(consultation.primaryLabel)}
           </button>
@@ -718,7 +863,7 @@ function renderDetailModal(elements, worksById, state, results, consultationConf
             aria-label="${escapeHtml(activeWork.title)} を${isCompared ? "比較から外す" : "比較に追加する"}"
             ${compareDisabled ? "disabled" : ""}
           >
-            ${isCompared ? "比較中" : compareDisabled ? "上限3件" : "比較に追加"}
+            ${isCompared ? "比較中" : compareDisabled ? "上限3件" : "比較"}
           </button>
           <button
             class="card-action ${isFavorite ? "work-card__action--active" : ""}"
@@ -726,11 +871,11 @@ function renderDetailModal(elements, worksById, state, results, consultationConf
             data-action="toggle-favorite"
             data-work-id="${escapeHtml(activeWork.id)}"
             aria-pressed="${isFavorite}"
-            aria-label="${escapeHtml(activeWork.title)} を${isFavorite ? "お気に入りから外す" : "お気に入りに追加する"}"
+            aria-label="${escapeHtml(activeWork.title)} を${isFavorite ? "保存候補から外す" : "保存候補に加える"}"
           >
-            ${isFavorite ? "お気に入り済み" : "お気に入りに追加"}
+            ${isFavorite ? "保存済み" : "保存"}
           </button>
-          ${externalDetailAction}
+          ${detailPageAction}
         </div>
       </div>
     </div>
@@ -768,22 +913,7 @@ function renderDetailModal(elements, worksById, state, results, consultationConf
         <p class="eyebrow">制作条件</p>
         <h3>予算と進行条件</h3>
         <dl class="detail-modal__facts">
-          <div>
-            <dt>想定予算帯</dt>
-            <dd>${escapeHtml(formatDisplayValue(activeWork.budgetRange))}</dd>
-          </div>
-          <div>
-            <dt>制作期間帯</dt>
-            <dd>${escapeHtml(formatDisplayValue(activeWork.durationRange))}</dd>
-          </div>
-          <div>
-            <dt>規模感</dt>
-            <dd>${escapeHtml(formatDisplayValue(activeWork.scale))}</dd>
-          </div>
-          <div>
-            <dt>デザイン傾向</dt>
-            <dd>${escapeHtml(formatDisplayValue(activeWork.designTone))}</dd>
-          </div>
+          ${renderFactsList(getProductionFacts(activeWork))}
         </dl>
       </section>
 
@@ -825,7 +955,7 @@ function renderDetailModal(elements, worksById, state, results, consultationConf
 
 function renderCta(elements, results, worksById, state, consultationConfig) {
   const content = getConsultationContent(results, state, worksById, consultationConfig);
-  const contextItems = content.contextItems?.length ? content.contextItems : ["相談文脈を整理中"];
+  const contextItems = content.contextItems?.length ? content.contextItems : ["閲覧メモを整理中"];
 
   elements.ctaEyebrow.textContent = content.eyebrow;
   elements.ctaTitle.textContent = content.title;

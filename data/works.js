@@ -10,8 +10,28 @@ const THUMBNAIL_RASTER_FORMATS = {
   "oniwa-landscapes-collection": "jpg",
   "riverline-logistics-recruit-portal": "jpg",
   "sumi-skincare-global-lp": "jpg",
-  "acaia-arts-foundation-archive": "jpg"
+  "acaia-arts-foundation-archive": "jpg",
+  "aoki-beauty-clinic": "jpg",
+  "aoki-standard-co": "jpg",
+  "aoki-tech-studio": "png",
+  "cafe-aoki": "jpg",
+  "aoki-estimate-simulator": "jpg"
 };
+
+const THUMBNAIL_VECTOR_FALLBACKS = new Set([
+  "lumen-clinic-renewal",
+  "northwind-recruit-stories",
+  "asteria-residence-launch",
+  "kuroto-tea-commerce",
+  "solace-dental-flow",
+  "vireon-saas-explorer",
+  "morii-architects-journal",
+  "hoshina-bakery-seasons",
+  "oniwa-landscapes-collection",
+  "riverline-logistics-recruit-portal",
+  "sumi-skincare-global-lp",
+  "acaia-arts-foundation-archive"
+]);
 
 const createThumbnailAssets = (slug) => {
   const vectorThumbnail = `./assets/images/works/${slug}.svg`;
@@ -24,13 +44,21 @@ const createThumbnailAssets = (slug) => {
     };
   }
 
+  const rasterThumbnail = `./assets/images/works/${slug}.${rasterFormat}`;
+
   return {
-    thumbnail: `./assets/images/works/${slug}.${rasterFormat}`,
-    thumbnailFallback: vectorThumbnail
+    thumbnail: rasterThumbnail,
+    thumbnailFallback: THUMBNAIL_VECTOR_FALLBACKS.has(slug) ? vectorThumbnail : rasterThumbnail
   };
 };
 
-// `detailUrl` is optional. Keep it `null` until a published external detail page exists.
+/*
+ * Archive entry guidance:
+ * - Keep the main field order broadly stable: identity -> thumbnail assets -> taxonomy -> summary/specs -> flags -> `detailUrl` -> `isConcept`.
+ * - Core field meanings: `summary` is the list-card overview, `challenge` is the key design constraint, `designTone` is the comparison/filter label.
+ * - `detailUrl` is optional. Keep it `null` unless a published detail page actually exists.
+ * - Prefer explainable copy over exaggeration in `summary`, `challenge`, `designTone`, and related descriptive fields.
+ */
 export const works = [
   {
     id: "work-01",
@@ -343,5 +371,135 @@ export const works = [
     designTone: "アーカイブ / インスティテューショナル",
     detailUrl: null,
     isConcept: true
+  },
+  {
+    id: "work-13",
+    title: "Aoki Beauty Clinic LP",
+    slug: "aoki-beauty-clinic",
+    ...createThumbnailAssets("aoki-beauty-clinic"),
+    genre: "美容・クリニック",
+    siteType: "LP",
+    purpose: "問い合わせ改善",
+    summary: "無料カウンセリング予約を主軸に、施術理解と安心感をひとつの導線でつなぐ美容クリニックLP。",
+    pageCount: 3,
+    scale: null,
+    features: ["アニメーション", "フォーム", "予約導線"],
+    techStack: ["HTML", "CSS", "JavaScript"],
+    budgetRange: null,
+    durationRange: null,
+    tags: ["美容クリニックLP", "症例ギャラリー", "予約導線", "計測設計"],
+    year: 2026,
+    isFeatured: true,
+    hasCms: false,
+    hasAnimation: true,
+    hasForm: true,
+    challenge: "症例・料金・担当医・FAQを一枚に整理しつつ、予約CTAが途切れない流れに設計した。",
+    designTone: "クリーン / ライトラグジュアリー",
+    detailUrl: "./projects/aoki-beauty-clinic/",
+    isConcept: false
+  },
+  {
+    id: "work-14",
+    title: "Aoki Standard Co.",
+    slug: "aoki-standard-co",
+    ...createThumbnailAssets("aoki-standard-co"),
+    genre: "ファッション・ライフスタイル",
+    siteType: "ブランドサイト",
+    purpose: "キャンペーン訴求",
+    summary: "ポップアップ開催の熱量を動画とレイヤー演出で立ち上げ、EC遷移までを設計したファッションLP。",
+    pageCount: 2,
+    scale: null,
+    features: ["アニメーション", "LP最適化"],
+    techStack: ["HTML", "CSS", "JavaScript"],
+    budgetRange: null,
+    durationRange: null,
+    tags: ["ポップアップ訴求", "動画ファースト", "EC導線", "商品ラインナップ"],
+    year: 2026,
+    isFeatured: true,
+    hasCms: false,
+    hasAnimation: true,
+    hasForm: false,
+    challenge: "冒頭の映像体験と商品訴求を分断させず、LPからEC案内ページまで離脱しにくい流れに整えた。",
+    designTone: "シネマティック / モード",
+    detailUrl: null,
+    isConcept: false
+  },
+  {
+    id: "work-15",
+    title: "Aoki Tech Studio",
+    slug: "aoki-tech-studio",
+    ...createThumbnailAssets("aoki-tech-studio"),
+    genre: "制作会社・BtoB",
+    siteType: "サービスサイト",
+    purpose: "リード獲得",
+    summary: "制作からアプリ開発、AI連携までの対応範囲を整理し、実績詳細と問い合わせ導線をつないだスタジオサイト。",
+    pageCount: 7,
+    scale: null,
+    features: ["アニメーション", "フォーム"],
+    techStack: ["HTML", "CSS", "JavaScript"],
+    budgetRange: null,
+    durationRange: null,
+    tags: ["制作会社サイト", "実績詳細ページ", "FAQ", "お問い合わせ導線"],
+    year: 2026,
+    isFeatured: true,
+    hasCms: false,
+    hasAnimation: true,
+    hasForm: true,
+    challenge: "情報量の多い開発領域を広く見せつつ、初見でも相談内容を想像しやすい順序に再構成した。",
+    designTone: "シャープ / テック",
+    detailUrl: "./projects/aoki-tech-studio/",
+    isConcept: false
+  },
+  {
+    id: "work-16",
+    title: "Cafe Aoki",
+    slug: "cafe-aoki",
+    ...createThumbnailAssets("cafe-aoki"),
+    genre: "食品・ライフスタイル",
+    siteType: "店舗サイト",
+    purpose: "ブランド刷新",
+    summary: "自家焙煎と静かな空間の世界観を軸に、メニュー閲覧と席予約までを自然につなぐカフェサイト。",
+    pageCount: 2,
+    scale: null,
+    features: ["アニメーション", "フォーム"],
+    techStack: ["HTML", "CSS", "JavaScript", "Formspree"],
+    budgetRange: null,
+    durationRange: null,
+    tags: ["店舗サイト", "メニューページ", "予約モーダル", "空間訴求"],
+    year: 2026,
+    isFeatured: false,
+    hasCms: false,
+    hasAnimation: true,
+    hasForm: true,
+    challenge: "写真と余白で店内の静けさを伝えながら、メニュー閲覧と予約アクションが自然につながる導線に整えた。",
+    designTone: "ダーク / クラシック",
+    detailUrl: null,
+    isConcept: false
+  },
+  {
+    id: "work-17",
+    title: "Aoki Estimate Simulator",
+    slug: "aoki-estimate-simulator",
+    ...createThumbnailAssets("aoki-estimate-simulator"),
+    genre: "制作会社・BtoB",
+    siteType: "サービスサイト",
+    purpose: "問い合わせ改善",
+    summary: "概算見積、比較、PDF保存、URL共有を一画面で完結させ、相談前のハードルを下げる見積シミュレーター。",
+    pageCount: 4,
+    scale: null,
+    features: ["フォーム", "多言語"],
+    techStack: ["HTML", "CSS", "JavaScript", "EmailJS", "jsPDF", "PWA"],
+    budgetRange: null,
+    durationRange: null,
+    tags: ["見積シミュレーター", "見積比較", "PDF保存", "日英切替"],
+    year: 2026,
+    isFeatured: true,
+    hasCms: false,
+    hasAnimation: true,
+    hasForm: true,
+    challenge: "費用感の可視化で終わらせず、比較保存・共有・相談フォーム連携までを切れ目なくつなぐ体験にまとめた。",
+    designTone: "ダーク / プロダクト",
+    detailUrl: "./projects/aoki-estimate-simulator/",
+    isConcept: false
   }
 ];

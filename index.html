@@ -6,7 +6,7 @@
     <title>Aoki Design Studio Works Finder | 制作実績検索・比較アーカイブ</title>
     <meta
       name="description"
-      content="Aoki Design Studioの制作実績を検索・絞り込み・比較し、近い事例をもとに相談準備まで進めるためのアーカイブUI。"
+      content="Aoki Design Studioの制作実績を、検索・絞り込み・比較できる一覧体験として再構成した掲載用アーカイブUI。"
     />
     <meta name="application-name" content="Aoki Design Studio Works Finder" />
     <meta name="apple-mobile-web-app-title" content="ADS Works Finder" />
@@ -20,11 +20,16 @@
     />
     <meta
       property="og:description"
-      content="制作実績の検索・比較・詳細確認・相談準備までを一連でつなぐ、Aoki Design StudioのアーカイブUI。"
+      content="制作実績の検索・比較・状態保持までを一連で見せる、Aoki Design Studioの掲載用アーカイブUI。"
     />
-    <!-- Replace with the deployed URL when publishing. -->
-    <!-- <meta property="og:url" content="https://your-domain.example/aoki-design-studio-works-finder/" /> -->
-    <meta property="og:image" content="./assets/images/meta/og-image.png" />
+    <meta
+      property="og:url"
+      content="https://okiaoki.github.io/Aoki-Design-Studio-Works-Finder/"
+    />
+    <meta
+      property="og:image"
+      content="https://okiaoki.github.io/Aoki-Design-Studio-Works-Finder/assets/images/meta/og-image.png"
+    />
     <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -39,15 +44,24 @@
     />
     <meta
       name="twitter:description"
-      content="制作実績の検索・比較・詳細確認・相談準備までを一連でつなぐ、Aoki Design StudioのアーカイブUI。"
+      content="制作実績の検索・比較・状態保持までを一連で見せる、Aoki Design Studioの掲載用アーカイブUI。"
     />
-    <meta name="twitter:image" content="./assets/images/meta/og-image.png" />
+    <meta
+      name="twitter:url"
+      content="https://okiaoki.github.io/Aoki-Design-Studio-Works-Finder/"
+    />
+    <meta
+      name="twitter:image"
+      content="https://okiaoki.github.io/Aoki-Design-Studio-Works-Finder/assets/images/meta/og-image.png"
+    />
     <meta
       name="twitter:image:alt"
       content="Aoki Design Studio Works Finderの共有用ビジュアル"
     />
-    <!-- Replace with the deployed URL when publishing. -->
-    <!-- <link rel="canonical" href="https://your-domain.example/aoki-design-studio-works-finder/" /> -->
+    <link
+      rel="canonical"
+      href="https://okiaoki.github.io/Aoki-Design-Studio-Works-Finder/"
+    />
     <link rel="icon" href="./assets/images/meta/favicon.svg" type="image/svg+xml" sizes="any" />
     <link rel="icon" href="./assets/images/meta/icon-192.png" type="image/png" sizes="192x192" />
     <link rel="shortcut icon" href="./assets/images/meta/icon-192.png" type="image/png" />
@@ -65,28 +79,28 @@
 
         <div class="hero__body">
           <div class="hero__copy">
-            <p class="hero__label">実績を探す</p>
+            <p class="hero__label">一覧体験を設計する</p>
             <h1>
-              <span class="hero__title-line">近い制作実績を探して、</span><span class="hero__title-line">比べて、<span class="hero__title-accent">そのまま相談へ。</span></span>
+              <span class="hero__title-line">近い制作実績を探して、</span><span class="hero__title-line">比べて、<span class="hero__title-accent">構成の違いまで見通す。</span></span>
             </h1>
             <p class="hero__description">
-              単なる一覧ではなく、依頼検討者が制作目的や予算感から近い案件を探し、
-              比較の目線を持ったまま相談導線へ進めるためのアーカイブUIです。
+              実制作物とコンセプト案件を、検索・絞り込み・比較しやすい一覧体験へ再構成した掲載用の検証プロジェクトです。
+              検索UI、一覧設計、状態保持までを一貫して組み立てています。
             </p>
           </div>
 
           <div class="hero__stats" aria-label="サイト概要">
             <article class="stat-card">
-              <span class="stat-card__value">12</span>
-              <span class="stat-card__label">厳選実績</span>
+              <span id="hero-stat-total" class="stat-card__value">17</span>
+              <span class="stat-card__label">掲載案件数</span>
             </article>
             <article class="stat-card">
-              <span class="stat-card__value">5</span>
-              <span class="stat-card__label">絞り込み軸</span>
+              <span id="hero-stat-real" class="stat-card__value">15</span>
+              <span class="stat-card__label">実案件数</span>
             </article>
             <article class="stat-card">
-              <span class="stat-card__value">3</span>
-              <span class="stat-card__label">比較枠</span>
+              <span id="hero-stat-filters" class="stat-card__value">6</span>
+              <span class="stat-card__label">絞り込み軸数</span>
             </article>
           </div>
         </div>
@@ -94,7 +108,7 @@
         <section class="search-panel" aria-labelledby="search-heading">
           <div class="search-panel__heading">
             <p class="eyebrow">キーワード検索</p>
-            <h2 id="search-heading">案件名・要件・タグから探す</h2>
+            <h2 id="search-heading">案件名・要件・区分から探す</h2>
           </div>
 
           <form class="search-form" id="search-form" role="search">
@@ -104,7 +118,7 @@
                 id="search-input"
                 name="search"
                 type="search"
-                placeholder="例: 採用、CMS、ラグジュアリー、予約導線"
+                placeholder="例: 実案件、CMS、ラグジュアリー、予約導線"
                 autocomplete="off"
               />
             </label>
@@ -117,14 +131,55 @@
         </section>
       </header>
 
+      <section class="project-intro" aria-labelledby="project-intro-title">
+        <div class="project-intro__copy">
+          <p class="eyebrow">Project Framing</p>
+          <h2 id="project-intro-title">実制作物を、検索・比較しやすい一覧体験へ再構成。</h2>
+          <p class="project-intro__lead">
+            実案件とコンセプト案件を整理しながら、検索・絞り込み・比較までを一連で見せる
+            掲載用アーカイブUIとして再設計しています。
+          </p>
+          <p class="project-intro__note">
+            依頼者に伝えたい論点を4つに絞り、データ定義と描画責務を分けた構成で整理しています。
+            Works Finder 側では検索・比較・検討支援UI設計を担い、各作品詳細側では見積・相談導線設計の考え方を補足します。
+          </p>
+          <a class="project-intro__case-link" href="./projects/works-finder/index.html">
+            Works Finder の設計意図を見る
+          </a>
+        </div>
+
+        <div class="project-intro__grid" aria-label="このサイトで見せていること">
+          <article class="project-intro__card">
+            <p class="project-intro__card-label">Project Map</p>
+            <h3>実績整理</h3>
+            <p>実案件 / コンセプトを区分し、ジャンルや目的ごとに見渡せる一覧へ整理。</p>
+          </article>
+          <article class="project-intro__card">
+            <p class="project-intro__card-label">Search UX</p>
+            <h3>検索・絞り込み</h3>
+            <p>キーワードと条件を組み合わせ、近い案件へたどれる探索導線を設計。</p>
+          </article>
+          <article class="project-intro__card">
+            <p class="project-intro__card-label">Compare Flow</p>
+            <h3>比較導線</h3>
+            <p>候補を保持しながら、制作条件や機能の差分を横並びで確認できる構成。</p>
+          </article>
+          <article class="project-intro__card">
+            <p class="project-intro__card-label">Data Driven</p>
+            <h3>データ駆動UI</h3>
+            <p>カード表示とデータ定義を分け、案件追加や差し替えに対応しやすく整理。</p>
+          </article>
+        </div>
+      </section>
+
       <main class="discovery-layout">
         <aside class="filter-panel" aria-labelledby="filter-heading">
           <div class="filter-panel__header">
             <p class="eyebrow">絞り込み</p>
             <h2 id="filter-heading">条件から絞り込む</h2>
             <p>
-              ジャンル・サイト種別・制作目的・実装特徴・予算帯を横断して、
-              近い制作実績だけを残します。
+              まずは案件区分・ジャンル・制作目的から触ると、
+              近い制作実績を探しやすくなります。
             </p>
           </div>
 
@@ -139,7 +194,7 @@
             </div>
 
             <div class="result-toolbar__controls">
-              <p id="result-count" class="result-count">12件の実績</p>
+              <p id="result-count" class="result-count">17件の実績</p>
 
               <label class="select-control" for="sort-order">
                 <span>並び替え</span>
@@ -175,21 +230,21 @@
 
       <section class="cta-section" id="contact" aria-labelledby="cta-title">
         <div class="cta-section__copy">
-          <p id="cta-eyebrow" class="eyebrow">相談準備</p>
-          <h2 id="cta-title">近い事例が見つかったら、そのまま相談準備に進む。</h2>
+          <p id="cta-eyebrow" class="eyebrow">作品メモ</p>
+          <h2 id="cta-title">比較で見えた観点を、短く残す。</h2>
           <p id="cta-description">
-            実績を見比べながら整理した要件を、そのまま相談メモとして持ち出せる導線です。
+            検索・比較で見えた条件や判断軸を、掲載用作品の締めとして整理する補助領域です。
           </p>
         </div>
 
         <div class="cta-section__brief" id="contact-brief" tabindex="-1">
-          <p class="eyebrow">相談メモ</p>
-          <h3 id="cta-brief-title" class="cta-section__brief-title">相談時に添えるメモ</h3>
+          <p class="eyebrow">Quick Notes</p>
+          <h3 id="cta-brief-title" class="cta-section__brief-title">見返し用メモ</h3>
           <p id="cta-brief-copy" class="cta-section__brief-copy">
-            今見ている条件や事例を、相談の前提情報としてそのまま引き継げます。
+            現在の条件や比較候補を短くまとめ、あとから参照しやすい状態に整えます。
           </p>
           <div id="cta-context" class="cta-section__context" aria-live="polite"></div>
-          <label class="sr-only" for="cta-draft">相談メモ</label>
+          <label class="sr-only" for="cta-draft">閲覧メモ</label>
           <textarea
             id="cta-draft"
             class="cta-section__draft"
@@ -197,24 +252,24 @@
             spellcheck="false"
           ></textarea>
           <div class="cta-section__brief-actions">
-            <button id="cta-copy" class="ghost-button" type="button">相談メモをコピー</button>
+            <button id="cta-copy" class="ghost-button" type="button">メモをコピー</button>
             <p id="cta-status" class="cta-section__status" role="status" aria-live="polite"></p>
           </div>
         </div>
 
         <div class="cta-section__actions">
           <a id="cta-primary" class="primary-button" href="#contact">
-            実績を踏まえて相談する
+            この条件をメモに残す
           </a>
           <a id="cta-secondary" class="ghost-button" href="#top">
-            一覧を見返して候補を整理する
+            一覧へ戻る
           </a>
         </div>
       </section>
 
       <footer class="site-footer">
         <p>Aoki Design Studio Works Finder</p>
-        <p>検索・比較・詳細確認・相談準備を一連でつなぐ、制作実績アーカイブUI。</p>
+        <p>実制作物を題材に、検索・比較・状態保持を含む一覧体験へ再構成した掲載用アーカイブUI。</p>
       </footer>
 
       <aside class="compare-bar" id="compare-bar" aria-label="比較バー" hidden>

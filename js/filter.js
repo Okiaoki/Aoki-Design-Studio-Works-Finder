@@ -3,15 +3,22 @@ const optionOrders = {
     "美容・クリニック",
     "採用・BtoB",
     "SaaS・BtoB",
+    "制作会社・BtoB",
     "不動産",
     "建築・インテリア",
+    "ファッション・ライフスタイル",
     "食品・ライフスタイル",
     "カルチャー・アート"
+  ],
+  selectedCaseTypes: [
+    "実案件",
+    "コンセプト"
   ],
   selectedSiteTypes: [
     "コーポレートサイト",
     "採用サイト",
     "ブランドサイト",
+    "店舗サイト",
     "サービスサイト",
     "ECサイト",
     "LP"
@@ -119,21 +126,30 @@ function getFeatureValues(work) {
   return unique(featureValues);
 }
 
+function getCaseTypeValues(work) {
+  return [work.isConcept ? "コンセプト" : "実案件"];
+}
+
 const filterDefinitions = [
+  {
+    key: "selectedCaseTypes",
+    label: "案件区分",
+    getValues: (work) => getCaseTypeValues(work)
+  },
   {
     key: "selectedGenres",
     label: "ジャンル",
     getValues: (work) => toArray(work.genre)
   },
   {
-    key: "selectedSiteTypes",
-    label: "サイト種別",
-    getValues: (work) => toArray(work.siteType)
-  },
-  {
     key: "selectedPurposes",
     label: "制作目的",
     getValues: (work) => toArray(work.purpose)
+  },
+  {
+    key: "selectedSiteTypes",
+    label: "サイト種別",
+    getValues: (work) => toArray(work.siteType)
   },
   {
     key: "selectedFeatures",
@@ -176,9 +192,11 @@ function getNormalizedFacetValues(values) {
 
 function getSearchIndex(work) {
   if (!searchIndexCache.has(work)) {
-    const rawSearchText = searchableFields
-      .flatMap((field) => toArray(work[field]))
-      .join(" ");
+    const rawSearchText = [
+      ...searchableFields.flatMap((field) => toArray(work[field])),
+      ...getFeatureValues(work),
+      ...getCaseTypeValues(work)
+    ].join(" ");
 
     searchIndexCache.set(work, normalizeText(rawSearchText));
   }
@@ -260,6 +278,12 @@ export function sortWorks(works, sortOrder) {
 
     if (featuredDiff !== 0) {
       return featuredDiff;
+    }
+
+    const caseTypeDiff = Number(left.isConcept) - Number(right.isConcept);
+
+    if (caseTypeDiff !== 0) {
+      return caseTypeDiff;
     }
 
     if (left.year !== right.year) {

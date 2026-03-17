@@ -1,6 +1,7 @@
 export const FILTER_STATE_KEYS = [
   "searchQuery",
   "selectedGenres",
+  "selectedCaseTypes",
   "selectedSiteTypes",
   "selectedPurposes",
   "selectedFeatures",
@@ -11,6 +12,7 @@ export const FILTER_STATE_KEYS = [
 export const initialState = Object.freeze({
   searchQuery: "",
   selectedGenres: [],
+  selectedCaseTypes: [],
   selectedSiteTypes: [],
   selectedPurposes: [],
   selectedFeatures: [],
@@ -25,6 +27,7 @@ export const initialState = Object.freeze({
 
 const arrayKeys = [
   "selectedGenres",
+  "selectedCaseTypes",
   "selectedSiteTypes",
   "selectedPurposes",
   "selectedFeatures",
